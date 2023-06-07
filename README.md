@@ -1,3 +1,3 @@
 # Cyclistic Bike Usage
 
-This Repository contains an RMardown file output into HTML.  The document analyzes bike usage difference between casual riders and members of Cyclistic.  Cyclistic is a fictional bike sharing company, the data for this project was used under the following [license](https://ride.divvybikes.com/data-license-agreement).  
+This Repository contains an RMardown file with its HTML output, the Tableau workbook used is available [here](https://public.tableau.com/views/CyclisticHowdoCasualRidersDifferfromMembers/RidersvsMonth?:language=en-US&:display_count=n&:origin=viz_share_link).  To view the output run [Cyclistic_Rider_Report_HTML.html](Cyclistic_Rider_Report_HTML.html). The document analyzes bike usage differences between casual riders and members of Cyclistic.  Cyclistic is a fictional bike sharing company, the data for this project was used under the following [license](https://ride.divvybikes.com/data-license-agreement).  
