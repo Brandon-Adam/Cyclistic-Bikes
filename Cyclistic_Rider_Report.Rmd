@@ -1,0 +1,111 @@
+---
+title: "Cyclistic Users: How Casual Riders Differ from Members"
+author: "Brandon Adam"
+date: "2023-06-05"
+output: html_document
+---
+
+This project is done on a fictional bike sharing company, Cyclistic.  Cyclistic offers the ability for anyone to rent a bicycle (electric and standard) for a single ride or a full day through one of their 1,320 docking stations.  Cyclistic also offers an annual pass that gives members unlimited rides throughout the year.  Cyclistic’s financial analysts have determined that annual members are more profitable than casual riders and want to figure out how best to convert casual riders into annual members.
+
+The goal of this project is to discover how the usage of Cyclistic bikes differs between annual members and casual riders and make recommendations based on those findings.
+
+One year of bike usage data, separated by months, has been provided by Cyclistic that was collected and stored in CSV files.  The data provides anonymous information of bike usage history for both casual and annual members, using "ride_id" as the primary key.  It includes the rideable type (electric or standard), start date and time, end date and time, start and end station name, ID, and GPS coordinates.  
+
+To clean and transform the data I parsed the start and end datetime into separate columns "start_time", "end_time", "start_date", and "end_date".  I then made a new column “trip_length”, subtracting "start_time" from "end_time"; and another column “weekday” giving the day of the week in numerical format (1-7, Sunday-Saturday) that the trip occurred.  Start and end station ID and name were missing for some entries.  I used Concatenate to combine latitude and longitude into one cell for all entries.  Then used XLookup to find the station ID and name for these missing entries when possible. I formatted the datatypes of each column to reflect the value in the cells.  These steps were recorded in a macro and performed on the 12 CSV files (one for each month).  Finally, I deleted all duplicates and used filters to remove unexplainable outliers in the data (e.g. "trip_length" values of 24:00:00 were rides where start and end time were equal). Using Pivot Tables I examined several questions
+
++ What months are most popular for riders?
++ What days of the week do bikes get most usage?
++ What times of the day are popular for riders?
++ Do riders prefer standard or electric bikes?
++ What are the most popular stations for riders to get bikes?
+
+
+The 12 CSV files were then uploaded into R studio and combined into one CSV file representing the data for the entire year (2022-04 – 2023-04).
+
+```{r eval=FALSE}
+library(dplyr)
+combine_bike_data_202204_202303 <- bind_rows(bike_data_202204,bike_data_202205,bike_data_202206,bike_data_202207,bike_data_202208,bike_data_202209,bike_data_202210,bike_data_202211,bike_data_202212,bike_data_202301,bike_data_202302,bike_data_202303)
+```
+
+
+The combined data was uploaded to Tableau to produce the following visualizations to answer my questions.
+ 
+### What Months are the Most Popular for Riders?
+![ ](riders vs month formatted.png)
+
+<br>
+Casual riders use bikes more in warmer summer months, peaking in July where the total usage was 10 times higher than January. Members also use bikes more in the summer months but we do not see a sharp peak, with the highest month of usage only 3 times greater than the lowest.  
+<br>
+Hypothesis:   
+
+* More use of bikes in the summer because temperature is more comfortable.  
+* Less use of bikes in winter when chill is a factor and closed transportation (bus or taxi) is temperature controlled. 
+* More tourists visiting using bikes in summer.  
+* Children out of school and families using bikes in summer.
+ <br>
+ <br>
+
+### What Days of the Week do Bikes get Most Usage?
+![ ](weekday vs bike usage bar.png)
+
+<br>
+Casual riders bike usage jumps up 31% on the weekends whereas member bike usage jumps up 19% on weekdays.  
+<br>
+Hypothesis:   
+
+* Members use bikes as alternative transportation to and from work.  
+* Casual riders prefer to use bikes recreationally.
+<br>
+<br>
+
+### What Times of Day are Popular for Riders?
+![ ](riders vs start time line.png)
+ 
+ <br>
+Casual riders use bikes more in the afternoon.  Usage steadily increases throughout the day and peaks at 5PM.  Members use bikes to commute to and from work so we see a small peak at 8AM and a larger peak at 5PM.  
+<br> 
+Hypothesis:  
+
+* Casual riders use another form of transportation to arrive at work and use bikes to leave work.  
+* Casual riders use bikes recreationally; we see a peak in the afternoon when they are done with school/work and the temperature has cooled down. 
+<br>
+<br>
+ 
+### Do Riders Prefer Standard or Electric Bikes?
+![ ](riders vs ride type formatted.png)
+
+<br>
+Casual riders prefer to use electric bikes over standard bikes (59:41) while members use electric and standard bikes equally.  
+<br>
+Hypothesis:   
+
+* Casual riders have to pay slightly more for electric bikes but still choose them, suggesting 59% of casual riders prefer speed and ease of use over the physical work required to pedal a standard bike.  
+* Electric bikes are new and purchasing one is out of many peoples' budgets; giving riders the option piques casual riders' interest in using an electric bike.  
+* Members do not pay extra to use electric bikes but 50% still choose standard bikes.  These members may be health conscious, using standard bikes as an exercise routine while the other 50% use electric bikes for their speed and ease of use.
+<br>
+<br>
+  
+### What are the 7 Most Popular Stations for Riders to get Bikes?
+![ ](Dashboard top 7 stations formatted.png)
+
+<br>
+There are over 1,320 stations where Cyclistic has bikes for rent.  We have filtered out the top 7 stations for members and casual riders.  5% of all members pick up their bike from one of the top 7 stations.  10% of casual riders pick up their bike from one of the top 7 stations and 3% (60,469) pick up their bike from the Chicago Pier (Streeter Dr & Grand Ave).  
+<br>
+Hypothesis:    
+
+* Members top 7 stations are located in popular living areas near apartments, parks, and commerce areas.  
+* Casual riders' top 7 stations are popular destinations for recreation with restaurants, parks, tours, and sightseeing areas near them.  
+* Casual riders using bikes from these stations are using them recreationally and some may be tourists.  
+
+<br>
+<br>
+
+## Where do we go from here?
+These findings are preliminary and I would suggest running a poll on both casual riders and members to confirm the findings from this project.  If the poll reflected the hypothesis suggested for these findings I would suggest these options.
+
+* Provide a one week pass or monthly subscription at higher rates as alternatives to the annual member pass.  This will give possible members a chance to try the service while not having to prepay for an entire year and bring in new customers that only live in the area for part of the year.  A one week pass would also provide tourists an alternative form of transportation, bringing in more money than a tourist only going on a couple of rides.  This one week pass would be advertised at major stations explaining the cost effectiveness of buying a one week pass versus getting a day pass 5 times. 
+* Offer a cheaper membership that only includes weekends.  This would give casual riders who use bikes for recreation on the weekends more justification to become a member at a lower price point while still bringing in more money than the occasional weekend trip.  
+* Advertise the cost effectiveness of a membership when using electric bikes exclusively.  Casual riders prefer electric bikes and pay more for them.  Explaining the cost effectiveness of a membership will bring in casual riders who frequently use electric bikes.  
+* Advertise memberships during the beginning of the summer months from April to July when casual riders begin using bikes more frequently.  As casual riders begin using bikes more often in the warmer months they will realize the cost effectiveness of a membership.  
+* Advertise the eco-friendly mission of Cyclistic, providing alternative transportation to and from work that is cheaper than driving a car or getting an uber, and faster than taking the bus.
+
